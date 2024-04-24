@@ -7,7 +7,7 @@ import string
 # Suppress tensorflow noncritical warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-from nodes.usage_table import UsageTableNode
+from nodes.box_carring import BoxCarringNode
 
 
 def ignore_punctuation_marks(sentence):
@@ -16,7 +16,7 @@ def ignore_punctuation_marks(sentence):
 
 
 if __name__ == "__main__":
-    usage_node = UsageTableNode()
+    usage_node = BoxCarringNode()
 
     while 1:
         # Wait for commands
@@ -24,12 +24,10 @@ if __name__ == "__main__":
             usage_node.command_arrived = False
             command = ignore_punctuation_marks(usage_node.command).lower()
 
-            if command == "przywieź mi herbatę" or ("bring" in command and "tea" in command):
-                if usage_node.handle_give_tea_command() != 0:
+            if command == "zanieś to do kuchni" or ("take" in command and "this" in command):
+                if usage_node.handle_carring_box() != 0:
                     usage_node.abort_task()
-            elif command == "odwieź kubek do kuchni" or ("take" in command and "empty" in command):
-                if usage_node.handle_drop_mug_command() != 0:
-                    usage_node.abort_task()
+                usage_node.go_to_position("dock")
             else:
                 pass
 
